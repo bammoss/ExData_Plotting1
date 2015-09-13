@@ -1,0 +1,16 @@
+h_p<-read.table("household_power_consumption.txt",header=TRUE,sep=";",na.strings="?",stringsAsFactors=FALSE)
+h_p$DateTime<-paste(h_p$Date,h_p$Time, sep=' ')
+h_p$DateTime<- strptime(h_p$DateTime, format="%d/%m/%Y %H:%M:%S", tz="")
+h_p$Date<-as.Date(h_p$Date,format = "%d/%m/%Y")
+h_p<-h_p[(h_p$Date<="2007-02-02")&(h_p$Date>="2007-02-01"),]
+png('plot4.png')
+par(mfrow=c(2,2))
+plot(h_p$DateTime,h_p$Global_active_power, ylab="Global Active Power (kilowatts)", xlab="", type="l")
+plot(h_p$DateTime,h_p$Voltage,ylab="Voltage",xlab="datetime", type="l")
+plot(h_p$DateTime,h_p$Sub_metering_1, ylab="Energy sub metering", xlab="", type="l", col="black")
+lines(h_p$DateTime, h_p$Sub_metering_2, type="l", col="red")
+lines(h_p$DateTime, h_p$Sub_metering_3, type="l", col="blue")
+legend("topright",legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), cex=0.8, col=c("black","red","blue"), lty=1)
+plot(h_p$DateTime,h_p$Global_reactive_power,ylab="Global_reactive_power",xlab="datetime", type="l")
+dev.off()
+
